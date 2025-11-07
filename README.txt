@@ -11,7 +11,7 @@ Usage:
 
 How to use this locally:
 ------------------------
-Download the audio folder, img fold, and index.html. Place them in your chosen directory. 
+Download the contents of the audio folder and img folder plus index.html. Place them in your chosen directory on your computer.
 
 Structure:
 ----------
