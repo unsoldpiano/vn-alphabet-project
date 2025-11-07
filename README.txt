@@ -1,0 +1,33 @@
+Vietnamese Alphabet 
+===================
+
+Usage:
+------
+1. Open `index.html` in any modern browser (Chrome, Edge, Firefox).
+2. Click on any letter to play its pronunciation.
+3. The popup will show a placeholder for an example word and image (you can replace or expand this later).
+4. "Quiz Mode" plays a random sound; click the correct letter to score points.
+
+
+How to use this locally:
+------------------------
+Download the audio folder, img fold, and index.html. Place them in your chosen directory. 
+
+Structure:
+----------
+vietnamese_alphabet_project/
+│
+├── index.html
+├── audio/
+│   ├── a.mp3
+│   ├── á.mp3
+│   ├── à.mp3
+│   └── etc.
+└── img/
+    └── alphabet.png
+
+Credits:
+--------
+Sound files are provided by Phan Anh: https://preply.com/en/tutor/5637486
+
+Sound files edited and page created by Teresa, with assistance provided by ChatGPT: https://instagram.com/unsoldpiano
