@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<title>Vietnamese Alphabet Interactive</title>
+<style>
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(to bottom right, #f9fafb, #e3f2fd);
+  margin: 0;
+  padding: 1.5rem;
+  text-align: center;
+}
+img {
+  max-width: 90%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+}
+#tonePopup {
+  position: absolute;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  padding: 10px;
+  display: none;
+  z-index: 10;
+}
+#tonePopup button {
+  font-size: 22px;
+  color: yellow;
+  margin: 5px;
+  padding: 6px 10px;
+  border: none;
+  background: #DA251D;
+  border-radius: 6px;
+  cursor: pointer;
+}
+#tonePopup button:hover { background:black; }
+button {
+  background: #007bff; color:white;
+  border:none; border-radius:8px;
+  padding:10px 20px; cursor:pointer; font-size:16px;
+}
+button:hover { background:#0056b3; }
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+#quiz-section {
+  margin-top: 2rem;
+  background: #f1f3f6;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+#quiz-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+  gap: 8px;
+  justify-items: center;
+  margin-top: 15px;
+}
+.quiz-btn {
+  background: #e0e0e0;
+  color: #333;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  padding: 6px;
+  font-size: 18px;
+  cursor: pointer;
+  width: 45px;
+}
+.quiz-btn:hover { background: #d0e4ff; }
+.correct { background: #6fcf97 !important; color: white; }
+.incorrect { background: #eb5757 !important; color: white; }
+#quizResult { font-size: 18px; font-weight: bold; margin-top: 10px; }
+#quizExtra { font-size: 16px; color: #007bff; margin-top: 4px; }
+#quizScore { font-size: 16px; margin-top: 5px; color: #333; }
+
+/* Pulse animation */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(0,123,255,0.6); }
+  70% { box-shadow: 0 0 0 10px rgba(0,123,255,0); }
+  100% { box-shadow: 0 0 0 0 rgba(0,123,255,0); }
+}
+.pulse {
+  animation: pulse 0.7s ease-out;
+}
+</style>
+</head>
+<body>
+<h1>Vietnamese Alphabet</h1>
+<h3>Recordings courtesy of <a href="https://preply.com/en/tutor/5637486" target=_blank>Phan Ahn (David)</a></h3><h4>Built by <a href="https://www.instagram.com/unsoldpiano" target=_blank>Teresa</a>, with a little help from AI :)</h4>
+<b>Instructions:</b> Click on the alphabet map to play a recording of that letter. Most vowels have a pop-up menu so you can listen to its various tones.<br />
+For the Quiz Mode, click on "Play Sound" to listen to a letter. Choose the correct answer.<br />
+
+<img src="img/alphabet.png" usemap="#vietmap" id="alphabetImg" alt="Vietnamese Alphabet">
+
+<map name="vietmap" id="vietmap">
+  <area shape="rect" coords="17,13,128,122" data-letter="a">
+  <area shape="rect" coords="135,14,242,122" data-letter="ă">
+  <area shape="rect" coords="250,20,352,120" data-letter="â">
+  <area shape="rect" coords="365,17,463,118" data-letter="b">
+  <area shape="rect" coords="474,22,575,119" data-letter="c">
+  <area shape="rect" coords="21,132,126,236" data-letter="d">
+  <area shape="rect" coords="136,132,236,235" data-letter="đ">
+  <area shape="rect" coords="247,134,351,235" data-letter="e">
+  <area shape="rect" coords="358,134,462,234" data-letter="ê">
+  <area shape="rect" coords="469,131,577,236" data-letter="g">
+  <area shape="rect" coords="17,242,124,349" data-letter="h">
+  <area shape="rect" coords="136,242,236,347" data-letter="i">
+  <area shape="rect" coords="247,245,352,346" data-letter="k">
+  <area shape="rect" coords="359,245,461,348" data-letter="l">
+  <area shape="rect" coords="471,245,579,350" data-letter="m">
+  <area shape="rect" coords="17,356,123,461" data-letter="n">
+  <area shape="rect" coords="132,353,237,462" data-letter="o">
+  <area shape="rect" coords="246,355,349,459" data-letter="ô">
+  <area shape="rect" coords="359,354,463,459" data-letter="ơ">
+  <area shape="rect" coords="472,358,576,463" data-letter="p">
+  <area shape="rect" coords="17,471,123,577" data-letter="q">
+  <area shape="rect" coords="131,470,237,574" data-letter="r">
+  <area shape="rect" coords="244,470,351,575" data-letter="s">
+  <area shape="rect" coords="356,472,461,576" data-letter="t">
+  <area shape="rect" coords="471,470,574,574" data-letter="u">
+  <area shape="rect" coords="73,584,177,686" data-letter="ư">
+  <area shape="rect" coords="189,582,292,687" data-letter="v">
+  <area shape="rect" coords="304,584,403,689" data-letter="x">
+  <area shape="rect" coords="412,583,519,688" data-letter="y">
+</map>
+
+<div id="tonePopup"></div>
+
+<!-- QUIZ SECTION -->
+<div id="quiz-section">
+  <h2>🎵 Quiz Mode</h2>
+  <button id="playSoundBtn">Play Sound</button>
+  <button id="replaySoundBtn" title="Replay the last sound" disabled>Replay Sound</button>
+  <button id="resetScoreBtn">Reset Score</button>
+  <div id="quiz-buttons"></div>
+  <p id="quizResult"></p>
+  <p id="quizExtra"></p>
+  <p id="quizScore"></p>
+</div>
+
+<script>
+const vowels = {
+ 'a':['a','á','à','ả','ã','ạ'],
+ 'ă':['ă'],
+ 'â':['â'],
+ 'e':['e','é','è','ẻ','ẽ','ẹ'],
+ 'ê':['ê','ế','ề','ể','ễ','ệ'],
+ 'i':['i','í','ì','ỉ','ĩ','ị'],
+ 'o':['o','ó','ò','ỏ','õ','ọ'],
+ 'ô':['ô','ố','ồ','ổ','ỗ','ộ'],
+ 'ơ':['ơ','ớ','ờ','ở','ỡ','ợ'],
+ 'u':['u','ú','ù','ủ','ũ','ụ'],
+ 'ư':['ư','ứ','ừ','ử','ữ','ự'],
+ 'y':['y','ý','ỳ','ỷ','ỹ','ỵ']
+};
+const consonants = ['b','c','d','đ','g','h','k','l','m','n','p','q','r','s','t','v','x'];
+const popup = document.getElementById('tonePopup');
+const map = document.getElementById('vietmap');
+
+map.addEventListener('click', e => {
+  if (e.target.tagName !== 'AREA') return;
+  popup.style.display = 'none';
+  const letter = e.target.dataset.letter;
+  if (vowels[letter] && vowels[letter].length > 1) showTonePopup(e, letter);
+  else playAudio(letter);
+});
+
+function playAudio(l) {
+  const yMap = {'ý':'í','ỳ':'ì','ỷ':'ỉ','ỹ':'ĩ','ỵ':'ị'};
+  const audioLetter = yMap[l] || l;
+  new Audio(`audio/${audioLetter}.mp3`).play();
+}
+
+function showTonePopup(ev, letter) {
+  const rect = ev.target.coords.split(',').map(Number);
+  const img = document.getElementById('alphabetImg');
+  const box = img.getBoundingClientRect();
+  const scaleX = box.width / img.naturalWidth;
+  const scaleY = box.height / img.naturalHeight;
+  const left = box.left + window.scrollX + (rect[0] + (rect[2]-rect[0])/2) * scaleX - 60;
+  const top = box.top + window.scrollY + rect[3] * scaleY + 5;
+  popup.innerHTML = '';
+  vowels[letter].forEach(t => {
+    const b = document.createElement('button');
+    b.textContent = t;
+    b.onclick = e => { e.stopPropagation(); playAudio(t); };
+    popup.appendChild(b);
+  });
+  popup.style.left = `${left}px`;
+  popup.style.top = `${top}px`;
+  popup.style.display = 'block';
+}
+
+document.body.addEventListener('click', e => {
+  if (!popup.contains(e.target) && e.target.tagName !== 'AREA') popup.style.display = 'none';
+});
+
+/* QUIZ SECTION */
+const quizButtonsContainer = document.getElementById('quiz-buttons');
+const playSoundBtn = document.getElementById('playSoundBtn');
+const resetScoreBtn = document.getElementById('resetScoreBtn');
+const replaySoundBtn = document.getElementById('replaySoundBtn');
+let quizLetters = [...consonants, ...Object.values(vowels).flat()];
+quizLetters.sort((a,b)=>a.localeCompare(b));
+
+quizLetters.forEach(l => {
+  const btn = document.createElement('button');
+  btn.textContent = l;
+  btn.className = 'quiz-btn';
+  btn.onclick = () => handleQuizGuess(l, btn);
+  quizButtonsContainer.appendChild(btn);
+});
+
+let currentAnswer = '';
+let correct = 0, total = 0;
+
+// i–y equivalence map
+const equivalents = {
+  'í':'ý', 'ì':'ỳ', 'ỉ':'ỷ', 'ĩ':'ỹ', 'ị':'ỵ',
+  'ý':'í', 'ỳ':'ì', 'ỷ':'ỉ', 'ỹ':'ĩ', 'ỵ':'ị'
+};
+
+playSoundBtn.onclick = () => {
+  const all = [...quizLetters];
+  currentAnswer = all[Math.floor(Math.random() * all.length)];
+  playAudio(currentAnswer);
+  replaySoundBtn.disabled = false;
+  replaySoundBtn.classList.add('pulse');
+  setTimeout(() => replaySoundBtn.classList.remove('pulse'), 800);
+  document.getElementById('quizResult').textContent = '';
+  document.getElementById('quizExtra').textContent = '';
+  quizButtonsContainer.querySelectorAll('.quiz-btn').forEach(b=>b.classList.remove('correct','incorrect'));
+};
+
+replaySoundBtn.onclick = () => {
+  if (currentAnswer) playAudio(currentAnswer);
+  else document.getElementById('quizResult').textContent = 'No sound to replay — click "Play Sound" first.';
+};
+
+resetScoreBtn.onclick = () => {
+  correct = 0; total = 0; currentAnswer = '';
+  document.getElementById('quizResult').textContent = '';
+  document.getElementById('quizExtra').textContent = '';
+  document.getElementById('quizScore').textContent = '';
+  replaySoundBtn.disabled = true;
+  quizButtonsContainer.querySelectorAll('.quiz-btn').forEach(b=>b.classList.remove('correct','incorrect'));
+  resetScoreBtn.classList.add('pulse');
+  setTimeout(() => resetScoreBtn.classList.remove('pulse'), 800);
+};
+
+function handleQuizGuess(choice, btn) {
+  if (!currentAnswer) return;
+  total++;
+
+  const match = equivalents[currentAnswer];
+  const isEquivalent = (choice === currentAnswer || choice === match);
+
+  if (isEquivalent) {
+    correct++;
+    btn.classList.add('correct');
+    highlightEquivalents(currentAnswer);
+    document.getElementById('quizResult').textContent = `✅ Correct! It was "${currentAnswer}"${match ? ` (also "${match}")` : ''}.`;
+    if (match) document.getElementById('quizExtra').textContent = `🎧 "${currentAnswer}" and "${match}" sound the same!`;
+  } else {
+    btn.classList.add('incorrect');
+    document.getElementById('quizResult').textContent = `❌ Wrong. The correct answer was "${currentAnswer}"${match ? ` (also "${match}")` : ''}.`;
+    if (match) document.getElementById('quizExtra').textContent = `🎧 "${currentAnswer}" and "${match}" sound the same!`;
+    highlightEquivalents(currentAnswer);
+  }
+
+  document.getElementById('quizScore').textContent = `Score: ${correct}/${total}`;
+  currentAnswer = '';
+}
+
+function highlightEquivalents(letter) {
+  const match = equivalents[letter];
+  quizButtonsContainer.querySelectorAll('.quiz-btn').forEach(b => {
+    if (b.textContent === letter || b.textContent === match) b.classList.add('correct');
+  });
+}
+</script>
+</body>
+</html>
